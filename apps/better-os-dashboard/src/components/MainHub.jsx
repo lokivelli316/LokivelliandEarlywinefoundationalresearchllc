@@ -28,49 +28,56 @@ const MainHub = () => {
       description: 'Connect to multiple AI models simultaneously',
       icon: '💬',
       path: '/chat',
-      tags: ['OpenAI', 'Anthropic', 'Google', 'Local']
+      status: 'Working',
+      statusColor: 'var(--success)'
     },
     {
       title: 'Physics Lab',
-      description: 'Advanced physics computation and visualization',
+      description: 'Advanced physics computation and verification',
       icon: '⚛️',
       path: '/physics',
-      tags: ['Derivations', 'Visualization', 'Constants']
+      status: 'Working',
+      statusColor: 'var(--success)'
     },
     {
       title: 'NotebookLM++',
       description: 'Enhanced notebooks with AI assistance',
       icon: '📓',
       path: '/notebook',
-      tags: ['Markdown', 'LaTeX', 'Code', 'AI']
+      status: 'Working',
+      statusColor: 'var(--success)'
     },
     {
       title: 'Media Studio',
       description: 'Generate images, videos, audio, and music',
       icon: '🎨',
       path: '/media',
-      tags: ['Image', 'Video', 'Audio', 'Music']
+      status: 'Simulated',
+      statusColor: 'var(--warning)'
     },
     {
       title: 'CAD & Design',
       description: 'Create 2D/3D designs and schematics',
       icon: '📐',
       path: '/cad',
-      tags: ['2D', '3D', 'Parametric', 'PDF']
+      status: 'Simulated',
+      statusColor: 'var(--warning)'
     },
     {
-      title: 'AI Agents',
+      title: 'AI Agent Harness',
       description: 'Build and deploy AI agents for automation',
       icon: '🤖',
       path: '/agents',
-      tags: ['Research', 'Development', 'Analysis', 'Automation']
+      status: 'Simulated',
+      statusColor: 'var(--warning)'
     },
     {
       title: 'Financial Hub',
       description: 'Manage finances and investments',
       icon: '💰',
       path: '/finance',
-      tags: ['Transactions', 'Investments', 'Reports']
+      status: 'Working',
+      statusColor: 'var(--success)'
     }
   ]
 
@@ -82,7 +89,7 @@ const MainHub = () => {
           Main Hub
         </h1>
         <p className="page-subtitle">
-          Welcome to Better OS Dashboard - Infinite Brain System
+          Better OS Dashboard - Modular AI Workspace
         </p>
       </div>
 
@@ -127,10 +134,21 @@ const MainHub = () => {
                 </div>
                 <h3>{feature.title}</h3>
                 <p className="text-secondary">{feature.description}</p>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {feature.tags.map((tag, i) => (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                  {feature.tags?.map((tag, i) => (
                     <span key={i} className="badge badge-secondary">{tag}</span>
                   ))}
+                </div>
+                <div style={{ marginTop: '12px' }}>
+                  <span 
+                    className="badge "
+                    style={{
+                      background: feature.status === 'Working' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                      color: feature.status === 'Working' ? 'var(--success)' : 'var(--warning)'
+                    }}
+                  >
+                    {feature.status}
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -161,7 +179,38 @@ const MainHub = () => {
             </span>
           </div>
           <p style={{ marginTop: '16px', color: 'var(--steel-dim)', fontSize: '0.85rem' }}>
-            Configure these in Settings to enable full functionality.
+            <strong>Note:</strong> API keys are retained in memory for the current session only and are cleared on reload.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">ℹ️ About This Prototype</h3>
+          </div>
+          <p style={{ color: 'var(--steel)' }}>
+            This is <strong>Prototype v0.1.0</strong> of Better OS Dashboard.
+          </p>
+          <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
+            <strong>Working Features:</strong>
+          </p>
+          <ul style={{ color: 'var(--steel-dim)', marginTop: '8px', paddingLeft: '20px' }}>
+            <li>Core navigation and layout</li>
+            <li>Chat with message history</li>
+            <li>Physics equation verification (math.js)</li>
+            <li>Notebook system with cells</li>
+            <li>Financial tracking</li>
+            <li>Settings and API configuration</li>
+          </ul>
+          <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
+            <strong>Simulated Features:</strong>
+          </p>
+          <ul style={{ color: 'var(--steel-dim)', marginTop: '8px', paddingLeft: '20px' }}>
+            <li>Media generation (mock data)</li>
+            <li>CAD 3D design (2D only currently)</li>
+            <li>AI agent execution (simulated responses)</li>
+          </ul>
+          <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
+            All data is persisted to browser storage and will survive page refreshes.
           </p>
         </div>
       </div>

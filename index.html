@@ -1,22 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Better OS Dashboard - Modular AI Workspace" />
-    <title>Better OS Dashboard</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Math -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lokivelli & Earlywine Foundational Research LLC — independent systems architecture and research across theoretical physics, infrastructure, and publishing. Built through adversarial audit, published with the failures left in.">
+<title>Lokivelli & Earlywine Foundational Research</title>
+
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="apple-touch-icon" href="assets/images/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --vault:#0c1830;          /* cold side */
+  --vault-deep:#070e1d;
+  --ember:#b8431f;          /* hot side */
+  --ember-bright:#e8631f;
+  --steel:#c9d1dc;
+  --steel-dim:#8b97a8;
+  --gold:#cba14e;
+  --ink:#05080f;
+  --paper:#e9edf3;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--paper);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+
+/* the seam: cold left, hot right — the brand's core gesture */
+.seam{
+  position:fixed;inset:0;z-index:0;
+  background:linear-gradient(100deg,var(--vault-deep) 0%,var(--vault) 42%,#1a1322 50%,#3a1c12 58%,var(--ember-bright) 100%);
+  opacity:0.16;
+}
+.grain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.04;
+  background-image:radial-gradient(circle at 1px 1px,#fff 1px,transparent 0);
+  background-size:3px 3px;
+}
+
+main,nav,footer{position:relative;z-index:1}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 32px;
+  backdrop-filter:blur(2px);
+  transition:background .3s ease,padding .3s ease;
+}
+nav.scrolled{
+  background:rgba(5,8,15,.88);
+  padding:12px 32px;
+  border-bottom:1px solid rgba(203,161,78,.18);
+}
+nav .mark{
+  font-family:'Cinzel',serif;font-weight:700;letter-spacing:.06em;
+  font-size:1.05rem;color:var(--gold);text-decoration:none;
+}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul a{
+  color:var(--steel-dim);text-decoration:none;font-size:.82rem;
+  text-transform:uppercase;letter-spacing:.14em;font-weight:500;
+  transition:color .2s;
+}
+nav ul a:hover{color:var(--paper)}
+.nav-toggle{display:none}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px;
+  padding:120px 48px 60px;max-width:1320px;margin:0 auto;
+}
+.hero-copy .eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--ember-bright);margin-bottom:22px;
+}
+.hero-copy h1{
+  font-family:'Cinzel',serif;font-weight:700;line-height:1.04;
+  font-size:clamp(2.3rem,5vw,4rem);letter-spacing:.01em;
+}
+.hero-copy h1 .cold{color:var(--steel)}
+.hero-copy h1 .hot{
+  background:linear-gradient(95deg,var(--ember) 0%,var(--ember-bright) 60%,var(--gold) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-copy .sub{
+  color:var(--steel-dim);font-size:1.05rem;margin:24px 0 8px;max-width:46ch;
+}
+.hero-copy .cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px 12px 16px;
+  background:rgba(203,161,78,.12);
+  border:1px solid rgba(203,161,78,.3);
+  border-radius:8px;
+  color:var(--gold);text-decoration:none;font-size:.9rem;font-weight:500;
+  transition:all .2s ease;
+}
+.hero-copy .cta:hover{
+  background:rgba(203,161,78,.2);
+  border-color:rgba(203,161,78,.6);
+}
+.hero-copy .cta i{font-size:1.1rem}
+
+.hero-visual{
+  position:relative;width:100%;height:100%;min-height:400px;
+}
+.hero-visual .orb{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:40vmax;height:40vmax;max-width:500px;max-height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(203,161,78,.12) 0%,transparent 50%),
+              radial-gradient(circle at 70% 70%,rgba(184,67,31,.1) 0%,transparent 50%);
+  filter:blur(40px);
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translate(-50%,-50%) rotate(0deg)}
+  50%{transform:translate(-50%,-50%) rotate(5deg)}
+}
+.hero-visual .particles{
+  position:absolute;inset:0;overflow:hidden;
+}
+.hero-visual .particle{
+  position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;
+  animation:twinkle 2s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:0;transform:scale(0)}
+  50%{opacity:1;transform:scale(1)}
+}
+
+/* ABOUT */
+.about{
+  padding:80px 48px;max-width:1320px;margin:0 auto;
+}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+}
+.about h2{
+  font-family:'Cinzel',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;
+  color:var(--steel);margin-bottom:20px;
+}
+.about h3{
+  font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;
+  color:var(--paper);margin-bottom:12px;
+}
+.about p{
+  color:var(--steel-dim);margin-bottom:1em;line-height:1.7;
+}
+.about a{
+  color:var(--gold);text-decoration:none;
+}
+.about a:hover{text-decoration:underline}
+
+/* FOOTER */
+footer{
+  padding:60px 48px 40px;max-width:1320px;margin:0 auto;
+  border-top:1px solid rgba(203,161,78,.1);
+}
+.footer-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+}
+.footer-col h4{
+  font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;
+  color:var(--steel);margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em;
+}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:10px}
+.footer-col a{
+  color:var(--steel-dim);text-decoration:none;font-size:.85rem;
+  transition:color .2s;
+}
+.footer-col a:hover{color:var(--paper)}
+.footer-bottom{
+  margin-top:40px;padding-top:20px;border-top:1px solid rgba(203,161,78,.08);
+  display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--steel-dim);
+}
+
+/* RESPONSIVE */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;padding:120px 24px 60px}
+  .hero-visual{margin-top:40px;min-height:300px}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .footer-grid{grid-template-columns:1fr;gap:30px}
+  nav{padding:18px 24px}
+}
+@media (max-width:600px){
+  .hero{padding:100px 20px 40px}
+  .about{padding:60px 20px}
+  footer{padding:40px 20px 30px}
+  .footer-bottom{flex-direction:column;gap:10px;text-align:center}
+}
+
+/* App Links Section */
+.app-links {
+  padding: 60px 48px;
+  max-width: 1320px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(203, 161, 78, 0.1);
+}
+
+.app-links h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 24px;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.app-card {
+  background: var(--vault);
+  border: 1px solid var(--vault-light);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.app-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.app-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.app-card p {
+  color: var(--steel-dim);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.app-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.app-card a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<div class="seam"></div>
+<div class="grain"></div>
+
+<nav>
+  <a href="#" class="mark">Lokivelli & Earlywine</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#publishing">Publishing</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Independent systems architecture and research</p>
+      <h1><span class="cold">Lokivelli & Earlywine</span> <span class="hot">Foundational Research</span> <span class="cold">LLC</span></h1>
+      <p class="sub">Built through adversarial audit, published with the failures left in.</p>
+      <a href="#about" class="cta">Learn more <i>↘</i></a>
+    </div>
+    <div class="hero-visual">
+      <div class="orb"></div>
+      <div class="particles" id="particles"></div>
+    </div>
+  </section>
+
+  <section class="app-links">
+    <h2>Applications</h2>
+    <div class="app-grid">
+      <div class="app-card">
+        <h3>🚀 Better OS Dashboard</h3>
+        <p>Modular AI workspace with chat, physics, notebooks, media, CAD, agents, and finance.</p>
+        <a href="apps/better-os-dashboard/">Open Dashboard →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div>
+        <h2>About</h2>
+        <p>Lokivelli & Earlywine Foundational Research LLC is an independent research organization focused on systems architecture, theoretical physics, and publishing.</p>
+        <p>Our work is built through adversarial audit — we test our systems rigorously and publish our findings, including the failures, to advance collective understanding.</p>
+      </div>
+      <div>
+        <h2>Methodology</h2>
+        <p>We believe in transparency through adversarial testing. Every system we build is subjected to rigorous audit, and we publish our findings — including failures and limitations — to help others learn from our experience.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#publishing">Publishing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Applications</h4>
+      <ul>
+        <li><a href="apps/better-os-dashboard/">Better OS Dashboard</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Lokivelli & Earlywine Foundational Research LLC</span>
+    <span>Built with adversarial audit</span>
+  </div>
+</footer>
+
+<script>
+// Simple particle animation
+const particlesContainer = document.getElementById('particles');
+const particleCount = 50;
+
+for (let i = 0; i < particleCount; i++) {
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.left = `${Math.random() * 100}%`;
+  particle.style.top = `${Math.random() * 100}%`;
+  particle.style.animationDelay = `${Math.random() * 2}s`;
+  particle.style.animationDuration = `${2 + Math.random() * 2}s`;
+  particlesContainer.appendChild(particle);
+}
+
+// Scroll effect for nav
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+</script>
+
+</body>
 </html>

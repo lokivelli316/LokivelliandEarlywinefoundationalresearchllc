@@ -1,0 +1,157 @@
+{
+  "name": "better-os-dashboard",
+  "version": "0.1.0",
+  "description": "Modular AI workspace with chat, physics, notebooks, media, CAD, agents, and finance",
+  "author": "Lokivelli & Earlywine Foundational Research LLC",
+  "license": "MIT",
+  "type": "application",
+  "category": "workspace",
+  
+  "capabilities": [
+    "chat",
+    "physics-computation",
+    "notebook-management",
+    "media-generation",
+    "cad-design",
+    "agent-management",
+    "financial-tracking"
+  ],
+  
+  "permissions": {
+    "storage": {
+      "description": "Persist user data to browser storage",
+      "level": "local"
+    },
+    "network": {
+      "description": "Connect to AI API providers",
+      "level": "user-configured"
+    }
+  },
+  
+  "routes": [
+    {
+      "path": "/",
+      "component": "MainHub",
+      "public": true
+    },
+    {
+      "path": "/chat",
+      "component": "ChatPage",
+      "public": true
+    },
+    {
+      "path": "/physics",
+      "component": "PhysicsPage",
+      "public": true
+    },
+    {
+      "path": "/notebook",
+      "component": "NotebookPage",
+      "public": true
+    },
+    {
+      "path": "/media",
+      "component": "MediaPage",
+      "public": true
+    },
+    {
+      "path": "/cad",
+      "component": "CADPage",
+      "public": true
+    },
+    {
+      "path": "/agents",
+      "component": "AgentsPage",
+      "public": true
+    },
+    {
+      "path": "/finance",
+      "component": "FinancePage",
+      "public": true
+    },
+    {
+      "path": "/settings",
+      "component": "SettingsPage",
+      "public": true
+    }
+  ],
+  
+  "stateSchema": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "org": { "type": "string" },
+        "preferences": { "type": "object" }
+      }
+    },
+    "apiConfig": {
+      "type": "object",
+      "properties": {
+        "openai": { "type": "object" },
+        "anthropic": { "type": "object" },
+        "google": { "type": "object" },
+        "local": { "type": "object" }
+      },
+      "sensitive": true
+    },
+    "chatSessions": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "physicsNotebooks": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "mediaProjects": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "cadProjects": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "agents": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "financialData": {
+      "type": "object",
+      "properties": {
+        "balance": { "type": "number" },
+        "transactions": { "type": "array" },
+        "investments": { "type": "array" }
+      }
+    }
+  },
+  
+  "health": {
+    "check": "/api/health",
+    "interval": 30000
+  },
+  
+  "migrations": [],
+  
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.1",
+    "zustand": "^4.5.1",
+    "framer-motion": "^11.0.8",
+    "mathjs": "^12.4.1",
+    "katex": "^0.16.9",
+    "react-markdown": "^9.0.1"
+  },
+  
+  "entry": "src/main.jsx",
+  "build": {
+    "command": "npm run build",
+    "output": "dist"
+  },
+  
+  "uninstall": {
+    "clearStorage": true,
+    "resetState": true
+  }
+}

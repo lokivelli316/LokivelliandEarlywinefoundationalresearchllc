@@ -1,16 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from '../store'
 import ReactMarkdown from 'react-markdown'
 import { v4 as uuidv4 } from 'uuid'
 
 const NotebookPage = () => {
-  const { physicsNotebooks, addPhysicsNotebook } = useStore()
-  const [notebooks, setNotebooks] = useState([])
-  const [activeNotebook, setActiveNotebook] = useState(null)
+  const { 
+    physicsNotebooks, 
+    activeNotebookId, 
+    addPhysicsNotebook,
+    updatePhysicsNotebook
+  } = useStore()
+  
   const [cells, setCells] = useState([])
   const [newCellType, setNewCellType] = useState('markdown')
   const [newCellContent, setNewCellContent] = useState('')
+
+  // Load cells from active notebook
+  useEffect(() => {
+    if (activeNotebookId) {
+      const notebook = physicsNotebooks.find(n => n.id === activeNotebookId)
+      if (notebook?.cells) {
+        setCells(notebook.cells)
+      }
+    }
+  }, [activeNotebookId, physicsNotebooks])
+
+  // Save cells to notebook
+  useEffect(() => {
+    if (activeNotebookId && cells.length > 0) {
+      updatePhysicsNotebook(activeNotebookId, { cells })
+    }
+  }, [cells, activeNotebookId])
 
   const cellTypes = [
     { value: 'markdown', label: 'Markdown' },
@@ -133,7 +154,7 @@ const NotebookPage = () => {
           NotebookLM++
         </h1>
         <p className="page-subtitle">
-          Enhanced notebook system with AI assistance
+          Enhanced notebook system - <span className="badge badge-secondary">Working</span>
         </p>
       </div>
 
@@ -181,6 +202,27 @@ const NotebookPage = () => {
               <p>Add a cell to get started</p>
             </div>
           )}
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">ℹ️ About NotebookLM++</h3>
+          </div>
+          <p style={{ color: 'var(--steel)' }}>
+            Create and manage notebooks with different cell types:
+          </p>
+          <ul style={{ color: 'var(--steel-dim)', marginTop: '12px', paddingLeft: '20px' }}>
+            <li><strong>Markdown:</strong> Rich text with formatting</li>
+            <li><strong>Math:</strong> LaTeX equations (preview coming soon)</li>
+            <li><strong>Code:</strong> Syntax-highlighted code blocks</li>
+            <li><strong>Text:</strong> Plain text</li>
+          </ul>
+          <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
+            <strong>Status:</strong> <span className="badge badge-secondary">Working</span>
+          </p>
+          <p style={{ color: 'var(--steel-dim)', fontSize: '0.85rem', marginTop: '8px' }}>
+            Cells are persisted to browser storage and will survive page refreshes.
+          </p>
         </div>
       </div>
     </div>

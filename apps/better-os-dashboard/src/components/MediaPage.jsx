@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useStore } from '../store'
+import { v4 as uuidv4 } from 'uuid'
 
 const MediaPage = () => {
+  const { mediaProjects, addMediaProject } = useStore()
   const [activeTab, setActiveTab] = useState('image')
   const [prompt, setPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
@@ -17,27 +20,35 @@ const MediaPage = () => {
       // Simulate generation
       await new Promise(resolve => setTimeout(resolve, 2000))
       
-      // Return mock URL based on tab
-      let url = ''
-      switch (activeTab) {
-        case 'image':
-          url = `https://picsum.photos/seed/${prompt}/512/512`
-          break
-        case 'video':
-          url = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4'
-          break
-        case 'audio':
-          url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
-          break
-        default:
-          url = ''
+      // Create a project record
+      const project = {
+        id: uuidv4(),
+        name: `Media ${mediaProjects.length + 1}`,
+        type: activeTab,
+        prompt,
+        url: getMockUrl(activeTab, prompt),
+        createdAt: new Date().toISOString()
       }
       
-      setGeneratedUrl(url)
+      addMediaProject(project)
+      setGeneratedUrl(project.url)
     } catch (error) {
       console.error('Generation error:', error)
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const getMockUrl = (type, prompt) => {
+    switch (type) {
+      case 'image':
+        return `https://picsum.photos/seed/${prompt}/512/512`
+      case 'video':
+        return 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4'
+      case 'audio':
+        return 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+      default:
+        return ''
     }
   }
 
@@ -69,7 +80,7 @@ const MediaPage = () => {
           Media Studio
         </h1>
         <p className="page-subtitle">
-          Generate images, videos, and audio with AI
+          Media generation interface - <span className="badge badge-secondary">Simulated</span>
         </p>
       </div>
 
@@ -217,12 +228,48 @@ const MediaPage = () => {
           </div>
         </div>
 
+        {/* Media Projects List */}
+        {mediaProjects.length > 0 && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">My Media Projects</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {mediaProjects.map((project) => (
+                <div
+                  key={project.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px',
+                    background: 'var(--vault-light)',
+                    borderRadius: 'var(--radius-md)'
+                  }}
+                >
+                  <span style={{ fontSize: '1.5rem' }}>
+                    {project.type === 'image' ? '🖼️' : project.type === 'video' ? '🎬' : '🎤'}
+                  </span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 500, color: 'var(--paper)' }}>
+                      {project.name}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--steel-dim)' }}>
+                      {project.prompt.slice(0, 50)}...
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">📚 About Media Generation</h3>
+            <h3 className="card-title">ℹ️ About Media Studio</h3>
           </div>
           <p style={{ color: 'var(--steel)' }}>
-            This is a prototype interface for AI media generation. In a full implementation, this would connect to:
+            This is a media generation interface. In a full implementation, this would connect to:
           </p>
           <ul style={{ color: 'var(--steel-dim)', marginTop: '12px', paddingLeft: '20px' }}>
             <li><strong>Image:</strong> DALL-E 3, MidJourney, Stable Diffusion, FLUX</li>
@@ -230,7 +277,10 @@ const MediaPage = () => {
             <li><strong>Audio:</strong> TTS-1, ElevenLabs, Coqui TTS</li>
           </ul>
           <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
-            Current implementation uses mock data for demonstration purposes.
+            <strong>Status:</strong> <span className="badge badge-secondary">Simulated</span>
+          </p>
+          <p style={{ color: 'var(--steel-dim)', fontSize: '0.85rem', marginTop: '8px' }}>
+            Currently uses mock data for demonstration. Projects are saved to browser storage.
           </p>
         </div>
       </div>

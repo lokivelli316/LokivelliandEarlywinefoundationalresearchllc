@@ -1,10 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useStore } from '../store'
+import { v4 as uuidv4 } from 'uuid'
 
 const CADPage = () => {
+  const { cadProjects, addCadProject } = useStore()
   const [activeTab, setActiveTab] = useState('2d')
   const [shapes, setShapes] = useState([])
   const [selectedTool, setSelectedTool] = useState(null)
+  const [activeProjectId, setActiveProjectId] = useState(null)
+
+  // Load shapes from active project
+  useEffect(() => {
+    if (activeProjectId) {
+      const project = cadProjects.find(p => p.id === activeProjectId)
+      if (project?.shapes) {
+        setShapes(project.shapes)
+      }
+    }
+  }, [activeProjectId, cadProjects])
+
+  // Save shapes to project
+  useEffect(() => {
+    if (activeProjectId && shapes.length > 0) {
+      const project = cadProjects.find(p => p.id === activeProjectId)
+      if (project) {
+        addCadProject({ ...project, shapes })
+      }
+    }
+  }, [shapes, activeProjectId, cadProjects])
 
   const tools2d = [
     { name: 'Rectangle', icon: '⬛', action: () => addShape('rect') },
@@ -21,7 +45,7 @@ const CADPage = () => {
 
   const addShape = (type) => {
     const newShape = {
-      id: Date.now().toString(),
+      id: uuidv4(),
       type,
       x: Math.random() * 300 + 50,
       y: Math.random() * 300 + 50,
@@ -37,9 +61,22 @@ const CADPage = () => {
     setShapes(shapes.filter(s => s.id !== id))
   }
 
+  const createNewProject = () => {
+    const project = {
+      id: uuidv4(),
+      name: `Project ${cadProjects.length + 1}`,
+      type: activeTab,
+      shapes: [],
+      createdAt: new Date().toISOString()
+    }
+    addCadProject(project)
+    setActiveProjectId(project.id)
+    setShapes([])
+  }
+
   const renderShape = (shape) => {
     const commonStyle = {
-      position: 'absolute' as const,
+      position: 'absolute',
       left: shape.x,
       top: shape.y,
       cursor: 'move'
@@ -169,7 +206,7 @@ const CADPage = () => {
           CAD & Design
         </h1>
         <p className="page-subtitle">
-          Create 2D/3D designs and schematics
+          2D/3D design interface - <span className="badge badge-secondary">Simulated</span>
         </p>
       </div>
 
@@ -232,6 +269,13 @@ const CADPage = () => {
               style={{ marginTop: '12px' }}
             >
               Clear All
+            </button>
+            <button
+              onClick={createNewProject}
+              className="btn btn-primary btn-sm"
+              style={{ marginTop: '12px' }}
+            >
+              New Project
             </button>
           </div>
 
@@ -300,12 +344,52 @@ const CADPage = () => {
           </div>
         </div>
 
+        {/* CAD Projects List */}
+        {cadProjects.length > 0 && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">My CAD Projects</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {cadProjects.map((project) => (
+                <div
+                  key={project.id}
+                  onClick={() => {
+                    setActiveProjectId(project.id)
+                    setShapes(project.shapes || [])
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px',
+                    background: activeProjectId === project.id ? 'var(--vault-light)' : 'transparent',
+                    borderRadius: 'var(--radius-md)',
+                    cursor: 'pointer',
+                    border: activeProjectId === project.id ? '1px solid var(--gold)' : '1px solid var(--vault-light)'
+                  }}
+                >
+                  <span style={{ fontSize: '1.5rem' }}>{project.type === '2d' ? '📐' : '🎨'}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 500, color: 'var(--paper)' }}>
+                      {project.name}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--steel-dim)' }}>
+                      {project.shapes?.length || 0} shapes
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">📚 About CAD & Design</h3>
+            <h3 className="card-title">ℹ️ About CAD & Design</h3>
           </div>
           <p style={{ color: 'var(--steel)' }}>
-            This is a prototype 2D/3D design interface. In a full implementation, this would include:
+            This is a 2D/3D design interface. In a full implementation, this would include:
           </p>
           <ul style={{ color: 'var(--steel-dim)', marginTop: '12px', paddingLeft: '20px' }}>
             <li>Parametric design with code</li>
@@ -315,7 +399,10 @@ const CADPage = () => {
             <li>PDF/SVG export</li>
           </ul>
           <p style={{ color: 'var(--steel)', marginTop: '12px' }}>
-            Current implementation uses 2D canvas with mock shapes for demonstration.
+            <strong>Status:</strong> <span className="badge badge-secondary">Simulated</span>
+          </p>
+          <p style={{ color: 'var(--steel-dim)', fontSize: '0.85rem', marginTop: '8px' }}>
+            Current implementation uses 2D canvas with mock shapes. Projects are saved to browser storage.
           </p>
         </div>
       </div>
