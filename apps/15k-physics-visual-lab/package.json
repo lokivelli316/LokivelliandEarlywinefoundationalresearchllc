@@ -1,0 +1,9 @@
+{
+  "name": "15k-physics-visual-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.mjs",
+    "verify": "node tests/verify_static.mjs"
+  }
+}

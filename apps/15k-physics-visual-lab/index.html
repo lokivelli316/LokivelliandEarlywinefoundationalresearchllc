@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#02060b">
+  <title>15K-Knob Physics Visual Lab — SME-MOND Traversal</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="importmap">
+  {"imports":{"three":"../../vendor/three/build/three.module.js","three/addons/":"../../vendor/three/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <canvas id="view" aria-label="Real-time SME-MOND scientific visualization"></canvas><div id="fx" aria-hidden="true"></div>
+  <header id="topbar"><div class="brand-block"><span>REAL-TIME SCIENTIFIC VISUALIZATION</span><h1>15K-KNOB <b>PHYSICS VISUAL LAB</b></h1><p>SME-MOND THIRD CLEAVE / PRIMA FLIGHT RECORDER</p></div><div class="top-actions"><button id="toggle-controls" type="button">CONTROL BOARD</button><button id="toggle-log" type="button">RUN RECEIPTS</button></div></header>
+  <aside id="hud" aria-label="Telemetry HUD"><section class="hud-bank"><div><span>OBSERVER DEPTH</span><b data-telemetry="depth">—</b><small>n/L</small></div><div><span>RADIAL SCALE</span><b data-telemetry="radial">—</b><small>r/L</small></div><div><span>WEYL EXPONENT</span><b data-telemetry="p">—</b><small>p</small></div><div><span>FLUID PRESSURE</span><b data-telemetry="pressure">—</b><small>P/U</small></div><div><span>HORIZON NORM</span><b data-telemetry="qh">—</b><small>q_H</small></div><div><span>PROJECTION</span><b data-telemetry="zeta">—</b><small>ζ</small></div><div><span>AMPLITUDE PRODUCT</span><b data-telemetry="product">—</b><small>q_H ζ</small></div></section><section class="hud-bank hud-bank--right"><div><span>DOMAIN</span><b data-telemetry="domain">—</b></div><div><span>GEODESIC STEPS</span><b data-telemetry="steps">—</b></div><div><span>ALTITUDE</span><b data-telemetry="altitude">—</b></div><div><span>FLIGHT SPEED</span><b data-telemetry="speed">—</b></div><div><span>FRAME RATE</span><b data-telemetry="fps">—</b><small>FPS</small></div><div><span>RESULT</span><b data-telemetry="result">—</b></div><div><span>PRIMA ROUTE</span><b data-telemetry="route">ROOT</b></div><div><span>RUN ID</span><b data-telemetry="run">UNCOMMITTED</b></div></section></aside>
+  <aside id="params" class="panel" aria-label="15K control board"><div class="panel-head"><div><small>DEPENDENCY CONTROL</small><h2>15K-KNOB BOARD</h2></div><button class="panel-close" data-close="params">×</button></div><div class="panel-tabs"><button class="active" data-tab="controls">CONTROLS</button><button data-tab="trace">DEPENDENCY TRACE</button></div><div id="control-board" class="panel-scroll"></div><div id="dependency-trace" class="dependency-trace"></div></aside>
+  <aside id="right-rail"><section class="instrument"><header><span>SCIENTIFIC STATUS</span><b>AUTHORITY LEDGER</b></header><div id="scientific-status"></div></section><section class="instrument"><header><span>AMPLITUDE WALL</span><b>OPEN / REDUCED</b></header><div id="amplitude-wall"></div></section></aside>
+  <aside id="receipts" class="panel panel--receipts" aria-label="Exploration log"><div class="panel-head"><div><small>APPEND-ONLY EXPERIMENT HISTORY</small><h2>EXPLORATION LOG</h2></div><button class="panel-close" data-close="receipts">×</button></div><div class="receipt-head"><span>RUN</span><span>MUTATION</span><span>RESULT</span><span>PRIMA</span><span>HASH</span></div><div id="receipt-log" class="panel-scroll"></div><div class="receipt-actions"><button id="verify-ledger">VERIFY CHAIN</button><output id="ledger-status">GENESIS</output></div></aside>
+  <div id="flight-pad" aria-label="Mobile flight controls"><button data-flight="pitchUp">↑</button><button data-flight="left">←</button><button data-flight="forward">▲</button><button data-flight="right">→</button><button data-flight="pitchDown">↓</button><button data-flight="rollLeft">⟲</button><button data-flight="back">▼</button><button data-flight="rollRight">⟳</button></div>
+  <div id="intro"><small>REAL-TIME SME-MOND RAYTRACING</small><h2>THE THIRD CLEAVE</h2><p>Conditional branches stay conditional. Every mutation leaves footprints.</p></div>
+  <div id="fatal" hidden></div><script type="module" src="./js/main.js"></script>
+</body></html>
