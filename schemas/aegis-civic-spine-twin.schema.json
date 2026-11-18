@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lokivelli.local/schemas/aegis-civic-spine-twin-v0.1.json",
+  "title": "AEGIS Civic Spine Digital Twin v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "spine_id",
+    "sections"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "spine_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "section_id",
+          "modules"
+        ],
+        "properties": {
+          "section_id": {
+            "type": "string"
+          },
+          "location_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "module_id",
+                "module_type",
+                "status"
+              ],
+              "properties": {
+                "module_id": {
+                  "type": "string"
+                },
+                "module_type": {
+                  "enum": [
+                    "communications_conduit",
+                    "power_conduit",
+                    "sensor",
+                    "access_vault",
+                    "drainage",
+                    "road_interface",
+                    "service_bay",
+                    "other"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "CONCEPT",
+                    "PROTOTYPE",
+                    "INSTALLED",
+                    "INSPECTION_REQUIRED",
+                    "FAILED",
+                    "REPAIRED",
+                    "SUPERSEDED"
+                  ]
+                },
+                "interface_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "interfaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "interface_id",
+                "kind"
+              ],
+              "properties": {
+                "interface_id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "requirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "performance_claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "claim_id",
+                "metric",
+                "status"
+              ],
+              "properties": {
+                "claim_id": {
+                  "type": "string"
+                },
+                "metric": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "UNKNOWN",
+                    "HYPOTHESIS",
+                    "MEASURED",
+                    "SUPPORTED",
+                    "VERIFIED",
+                    "REJECTED"
+                  ]
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "inspections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "inspection_id",
+                "timestamp",
+                "result"
+              ],
+              "properties": {
+                "inspection_id": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "result": {
+                  "enum": [
+                    "PASS",
+                    "FAIL",
+                    "UNKNOWN"
+                  ]
+                },
+                "fault_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "fmea": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "failure_mode",
+                "effect",
+                "detection",
+                "mitigation",
+                "residual_risk"
+              ],
+              "properties": {
+                "failure_mode": {
+                  "type": "string"
+                },
+                "effect": {
+                  "type": "string"
+                },
+                "detection": {
+                  "type": "string"
+                },
+                "mitigation": {
+                  "type": "string"
+                },
+                "residual_risk": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "repairs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "repair_id",
+                "timestamp",
+                "action"
+              ],
+              "properties": {
+                "repair_id": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "supersedes_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
